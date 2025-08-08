@@ -4,15 +4,13 @@ const cors = require('cors');
 const axios = require('axios');
 
 const app = express();
-const PORT = 3000;
 
-// The key is now securely loaded from your .env file
+// The key is securely loaded from your .env file on local, and Vercel environment variables on deployment
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
-
 // Middleware
-app.use(cors()); // Allows your frontend to talk to this server
-app.use(express.json()); // Allows the server to understand JSON
+app.use(cors());
+app.use(express.json());
 
 // The single API route your frontend will call
 app.post('/api/generate', async (req, res) => {
@@ -20,6 +18,10 @@ app.post('/api/generate', async (req, res) => {
 
     if (!userPrompt) {
         return res.status(400).json({ error: 'Prompt is required.' });
+    }
+
+    if (!GEMINI_API_KEY) {
+        return res.status(500).json({ error: 'API Key is not configured on the server.' });
     }
 
     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${GEMINI_API_KEY}`;
@@ -36,6 +38,5 @@ app.post('/api/generate', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`🚀 Secure proxy server running on http://localhost:${PORT}`);
-});
+// Export the app for Vercel's serverless environment
+module.exports = app;
