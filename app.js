@@ -101,7 +101,7 @@ class FinancialCalculator {
     container.classList.add('loading');
 
     // This now points to YOUR backend server
-    const localApiUrl = 'http://localhost:3000/api/generate'; 
+    const localApiUrl = '/api/generate'; 
     
     const payload = { prompt: prompt };
 
@@ -280,3 +280,4 @@ class FinancialCalculator {
 document.addEventListener('DOMContentLoaded', () => {
     window.finpalApp = new FinancialCalculator();
 });
+
