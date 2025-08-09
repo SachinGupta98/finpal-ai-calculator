@@ -1,12 +1,14 @@
 {
+  "functions": {
+    "Backend/server.js": {
+      "runtime": "nodejs18.x"
+    }
+  },
   "rewrites": [
     {
-      "source": "/api/health",
-      "destination": "/Backend/server.js"
-    },
-    {
-      "source": "/api/generate",
+      "source": "/api/:path*",
       "destination": "/Backend/server.js"
     }
   ]
 }
+ 
