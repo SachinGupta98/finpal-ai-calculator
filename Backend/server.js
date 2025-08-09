@@ -5,14 +5,26 @@ const axios = require('axios');
 
 const app = express();
 
-// The key is securely loaded from your .env file on local, and Vercel environment variables on deployment
+// The key is securely loaded from Vercel environment variables on deployment
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
-// The single API route your frontend will call
+// --- NEW: Health Check Route ---
+// This route helps us test if the server is running and if the API key is loaded.
+app.get('/api/health', (req, res) => {
+    res.status(200).json({ 
+        status: 'ok', 
+        message: 'Backend is running correctly.',
+        apiKeyLoaded: !!GEMINI_API_KEY, // This will be true if the key is loaded, false otherwise
+        timestamp: new Date().toISOString()
+    });
+});
+
+
+// The main API route for Gemini calls
 app.post('/api/generate', async (req, res) => {
     const userPrompt = req.body.prompt;
 
